@@ -10,7 +10,6 @@ public class Transactions {
     public Transactions(String date, String time, String description, String vendor, double amount) {
         this.date = date;
         this.time = time;
-        this.time = vendor;
         this.description = description;
         this.vendor = vendor;
         this.amount = amount;
@@ -23,6 +22,8 @@ public class Transactions {
     public String getTime() {
         return time;
     }
+
+    public String getDescription() { return description;}
 
     public String getVendor() {
         return vendor;
