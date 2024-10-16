@@ -99,6 +99,15 @@ public class AccountingLedgerApp {
                 "A - All transactions+\n" +
                 "D - Deposits only \n" +
                 "P - Payments only");
-        String filter = Keyboard.nextLine().trim().toUpperCase();
+        String Selection = Keyboard.nextLine().trim().toUpperCase();
+        switch (Selection) {
+            case "A":
+                System.out.println("Displaying all of the transactions: ");
+                for (Transactions transaction : transactions) {
+                    if (transaction.getAmount() > 0) {
+                        System.out.println(transaction);
+                    }
+                }
+        }
     }
 }
