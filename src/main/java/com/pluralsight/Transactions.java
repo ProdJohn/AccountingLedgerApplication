@@ -23,8 +23,7 @@ public class Transactions {
         return time;
     }
 
-    public String getDescription() {
-        return description;}
+    public String getDescription() { return description;}
 
     public String getVendor() {
         return vendor;
