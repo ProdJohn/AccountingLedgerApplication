@@ -9,27 +9,27 @@ import java.util.Scanner;
 
 
 public class AccountingLedgerApp {
-    private static final String fileLocation = "src/main/resources/transactions.csv";
+    private static final String fileLocation = "C:\\Users\\Fright\\Desktop\\Pluralsight\\java-developement\\LearnToCode_Capstones\\AccountingLedgerApplication\\src\\main\\transactions.csv";
 
     public static void main(String[] args) {
         ArrayList<Transactions> transactions = loadTransactions();
-        Scanner keyboard = new Scanner(System.in);
+        Scanner Keyboard = new Scanner(System.in);
         while (true) {
             System.out.println("Welcome to Prodigy Financials, please select an option: \n" +
                     "D- Add Deposit \n" +
                     "P- Make Payment \n" +
                     "L- Ledger \n" +
                     "X- Exit");
-            String Selection = keyboard.nextLine().trim().toUpperCase();
+            String Selection = Keyboard.nextLine().trim().toUpperCase();
             switch (Selection) {
                 case "D":
-                    addTransaction(transactions, keyboard,"deposit");
+                    addTransaction(transactions, Keyboard, "deposit");
                     break;
                 case "P":
-                    addTransaction(transactions, keyboard, "payment");
+                    addTransaction(transactions, Keyboard, "payment");
                     break;
                 case "L":
-                    displayLedger(transactions, keyboard);
+                    displayLedger(transactions, Keyboard);
                     break;
                 case "X":
                     saveTransactions(transactions);
@@ -42,34 +42,51 @@ public class AccountingLedgerApp {
 
     private static ArrayList<Transactions> loadTransactions() {
         ArrayList<Transactions> transactions = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileLocation))) {
             String line;
+            boolean isFirstLine = true;
             while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
                 String[] parts = line.split("\\|");
-                Transactions Transactions = new Transactions(
-                        parts[0], parts[1], parts[2], parts[3], Double.parseDouble(parts[4]));
-                transactions.add(Transactions);
+                try {
+                    Transactions transaction = new Transactions(
+                            parts[0], parts[1], parts[2], parts[3], Double.parseDouble(parts[4]));
+                    transactions.add(transaction);
+                } catch (NumberFormatException e) {
+                    System.out.println("Error parsing amount: " + parts[4]);
+                }
             }
         } catch (IOException e) {
-            System.out.println("Error during reading the transactions file.");
+            System.out.println("Error in reading the transactions file.");
             e.printStackTrace();
         }
         return transactions;
     }
 
     private static void saveTransactions(ArrayList<Transactions> transactions) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv"))) {
-            for (Transactions Transactions : transactions) {
-                writer.write(transactions.toString());
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileLocation))) {
+            // Write the header if needed
+            writer.write("date|time|description|vendor|amount");
+            writer.newLine();
+            for (Transactions transaction : transactions) {
+                String transactionLine = String.join("|",
+                        transaction.getDate(),
+                        transaction.getTime(),
+                        transaction.getDescription(),
+                        transaction.getVendor(),
+                        String.valueOf(transaction.getAmount())
+                );
+                writer.write(transactionLine);
                 writer.newLine();
             }
             System.out.println("Transactions were updated successfully.");
         } catch (IOException e) {
             System.out.println("Error in updating the transactions.");
             e.printStackTrace();
-
         }
-
     }
 
     private static void addTransaction(ArrayList<Transactions> transactions, Scanner Keyboard, String type) {
