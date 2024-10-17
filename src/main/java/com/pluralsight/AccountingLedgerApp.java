@@ -8,7 +8,13 @@ import java.util.Scanner;
 
 
 public class AccountingLedgerApp {
-    private static final String fileLocation = "src/main/resources/transactions.csv";
+    private static final String fileLocation = "C:\\Users\\Fright\\Desktop\\Pluralsight\\java-developement\\LearnToCode_Capstones\\AccountingLedgerApplication\\src\\main\\resources\\transactions.csv";
+
+    /*Down below is the main method
+    this method displays options for the user (D for deposit,
+    P for payment, L for viewing the ledger, and X for exit).
+     */
+
 
     public static void main(String[] args) {
         ArrayList<Transactions> transactions = loadTransactions();
@@ -20,6 +26,11 @@ public class AccountingLedgerApp {
                     "L- Ledger \n" +
                     "X- Exit");
             String Selection = Keyboard.nextLine().trim().toUpperCase();
+
+            /*the switch statement below was used to handle the user input
+            and to call to the appropriate method
+             */
+
             switch (Selection) {
                 case "D":
                     addTransaction(transactions, Keyboard, "deposit");
@@ -44,7 +55,7 @@ public class AccountingLedgerApp {
 
     private static ArrayList<Transactions> loadTransactions() {
         ArrayList<Transactions> transactions = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileLocation))) {
             String line;
             boolean isFirstLine = true;
             while ((line = reader.readLine()) != null) {
@@ -68,8 +79,13 @@ public class AccountingLedgerApp {
         return transactions;
     }
 
+
+    /* below is how we are able to save our user input
+    aka the transactions that the user types
+     */
+
     private static void saveTransactions(ArrayList<Transactions> transactions) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("transactions.csv"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileLocation))) {
             writer.write("date|time|description|vendor|amount");
             writer.newLine();
             for (Transactions transaction : transactions) {
@@ -85,7 +101,7 @@ public class AccountingLedgerApp {
             }
             System.out.println("System was updated successfully.");
         } catch (IOException e) {
-            System.out.println("Error in updating the transactions.");
+            System.out.println("Error in updating the transactions." + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -108,7 +124,7 @@ public class AccountingLedgerApp {
 
         Transactions transaction = new Transactions(dateTimeParts[0], dateTimeParts[1], description, vendor, amount);
         transactions.add(transaction);
-        System.out.println("Transaction recorded successfully.");
+        saveTransactions(transactions);
         System.out.println("Is there anything else you'd like to complete today? (yes/no)");
         String anotherTask = Keyboard.nextLine().trim().toLowerCase();
 
