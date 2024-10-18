@@ -2,9 +2,9 @@
 
 ---
 
-# AccountingLedgerApp
+# AccountingLedgerApplication
 
-**AccountingLedgerApp**, a console-based Java application to track financial transactions. This application allows users to add deposits, make payments, view the transaction ledger, and more. It's my first Java project with one month of learning. It includes file handling, user input, and data management.
+**AccountingLedgerApplication** is a console-based Java application to track financial transactions. This application allows users to add deposits, make payments, view the transaction ledger, and more. It's my first Java project with one month of learning. It includes file handling, user input, and data management.
 
 ## Features
 
